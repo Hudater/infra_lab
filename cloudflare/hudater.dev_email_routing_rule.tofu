@@ -5,7 +5,7 @@ resource "cloudflare_email_routing_address" "gmail_mail_address_hudater_dev" {
 
 resource "cloudflare_email_routing_rule" "rule_literal_cf_email_routing_hudater_dev" {
   enabled  = true
-  name     = "Rule created at 2025-06-22T20:46:39.758Z"
+  name     = "Forward to my gmail destination address"
   priority = 0
   zone_id  = var.zone_id_hudater_dev
   actions = [{

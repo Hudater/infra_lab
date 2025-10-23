@@ -1,51 +1,3 @@
-resource "cloudflare_dns_record" "oci-mu-amd" {
-  comment  = "OCI Mumbai server on x86_amd"
-  content  = var.oci-bom-amd-1-ip
-  name     = "oci-mu-amd.haops.dev"
-  proxied  = false
-  tags     = []
-  ttl      = 1
-  type     = "A"
-  zone_id  = var.zone_id_haops_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "oci-mu-arm" {
-  comment  = "OCI Mumbai server on ARM"
-  content  = var.oci-bom-arm-ip
-  name     = "oci-mu-arm.haops.dev"
-  proxied  = false
-  tags     = []
-  ttl      = 1
-  type     = "A"
-  zone_id  = var.zone_id_haops_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "oci-zrm-amd" {
-  comment  = "OCI Zurich server on x86_amd"
-  content  = var.oci-zrh-amd-1-ip
-  name     = "oci-zr-amd.haops.dev"
-  proxied  = false
-  tags     = []
-  ttl      = 1
-  type     = "A"
-  zone_id  = var.zone_id_haops_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "oci-zr-arm" {
-  comment  = "OCI Zurich server on ARM"
-  content  = var.oci-zrh-arm-ip
-  name     = "oci-zr-arm.haops.dev"
-  proxied  = false
-  tags     = []
-  ttl      = 1
-  type     = "A"
-  zone_id  = var.zone_id_haops_dev
-  settings = {}
-}
-
 resource "cloudflare_dns_record" "docs" {
   content = "hudater.github.io"
   name    = "docs.haops.dev"
@@ -167,4 +119,3 @@ resource "cloudflare_dns_record" "spf_email" {
   zone_id  = var.zone_id_haops_dev
   settings = {}
 }
-

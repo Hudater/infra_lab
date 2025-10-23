@@ -5,7 +5,7 @@ resource "cloudflare_email_routing_address" "gmail_mail_address_haops_dev" {
 
 resource "cloudflare_email_routing_rule" "rule_literal_cf_email_routing_haops_dev" {
   enabled  = true
-  name     = "Rule created at 2025-06-22T20:46:39.758Z"
+  name     = "Forward to my gmail destination address"
   priority = 0
   zone_id  = var.zone_id_haops_dev
   actions = [{
