@@ -1,8 +1,7 @@
 terraform {
   # cloud {
   #   hostname     = "app.terraform.io"
-  #   organization = "your org"
-
+  #   organization = "homelab_hudater"
   #   workspaces {
   #     name = "Cloudflare"
   #   }
