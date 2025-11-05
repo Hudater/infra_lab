@@ -1,11 +1,11 @@
 terraform {
-  # cloud {
-  #   hostname     = "app.terraform.io"
-  #   organization = "homelab_hudater"
-  #   workspaces {
-  #     name = "Cloudflare"
-  #   }
-  # }
+  cloud {
+    hostname     = "app.terraform.io"
+    organization = "homelab_hudater"
+    workspaces {
+      name = "Cloudflare"
+    }
+  }
 
   required_providers {
     cloudflare = {
