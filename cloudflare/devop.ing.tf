@@ -6,8 +6,9 @@ resource "cloudflare_dns_record" "alias_test" {
   zone_id  = var.zone_id_devop_ing
   settings = {}
 }
+
 resource "cloudflare_dns_record" "test_ci" {
-  content  = "9.9.9.9"
+  content  = "1.1.1.1"
   name     = "ci.devop.ing"
   ttl      = 1
   type     = "A"
