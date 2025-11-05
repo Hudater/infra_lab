@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "./cloudflare/**"
+      - "cloudflare/**"
   pull_request:
 
 permissions:
