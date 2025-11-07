@@ -8,6 +8,18 @@ resource "cloudflare_dns_record" "blog_hudater_dev" {
   settings = {}
 }
 
+resource "cloudflare_dns_record" "docs_hudater_dev" {
+  content = "hudater.github.io"
+  name    = "docs.hudater.dev"
+  proxied = true
+  tags    = []
+  ttl     = 1
+  type    = "CNAME"
+  zone_id = var.zone_id_hudater_dev
+  settings = {
+    flatten_cname = false
+  }
+}
 resource "cloudflare_dns_record" "mail_return_hudater_dev" {
   content  = "return.smtp2go.net"
   name     = "em1369722.hudater.dev"

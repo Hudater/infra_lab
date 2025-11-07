@@ -1,6 +1,6 @@
 resource "cloudflare_dns_record" "docs" {
   content = "hudater.github.io"
-  name    = "docs.haops.dev"
+  name    = "archive-docs.haops.dev"
   proxied = true
   tags    = []
   ttl     = 1
