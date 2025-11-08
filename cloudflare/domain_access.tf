@@ -41,3 +41,23 @@ resource "cloudflare_dns_record" "OCI_ZRH_AMD_1_domain_access" {
   zone_id  = var.zone_id_domain_access
   settings = {}
 }
+
+resource "cloudflare_dns_record" "OCI_ZRH_ARM_domain_access_traefik" {
+  content  = var.oci-zrh-arm-ip
+  name     = var.domain_access
+  proxied  = false
+  ttl      = 1
+  type     = "A"
+  zone_id  = var.zone_id_domain_access
+  settings = {}
+}
+
+resource "cloudflare_dns_record" "OCI_ZRH_ARM_domain_access_wildcard_traefik" {
+  content  = var.domain_access
+  name     = "*.${var.domain_access}"
+  proxied  = false
+  ttl      = 1
+  type     = "CNAME"
+  zone_id  = var.zone_id_domain_access
+  settings = {}
+}
