@@ -1,7 +1,7 @@
 resource "cloudflare_dns_record" "OCI_BOM_ARM_domain_lab_traefik" {
   content  = var.oci-bom-arm-ip
   name     = var.domain_lab
-  proxied  = true
+  proxied  = false
   ttl      = 1
   type     = "A"
   zone_id  = var.zone_id_domain_lab
@@ -11,7 +11,7 @@ resource "cloudflare_dns_record" "OCI_BOM_ARM_domain_lab_traefik" {
 resource "cloudflare_dns_record" "OCI_BOM_ARM_wildcard_domain_lab_traefik" {
   content  = var.domain_lab
   name     = "*.${var.domain_lab}"
-  proxied  = true
+  proxied  = false
   ttl      = 1
   type     = "CNAME"
   zone_id  = var.zone_id_domain_lab
