@@ -1,5 +1,5 @@
 resource "cloudflare_dns_record" "OCI_BOM_ARM_domain_lab_traefik" {
-  content  = var.oci-bom-arm-ip
+  content  = var.oci-zrh-arm-ip
   name     = var.domain_lab
   proxied  = true
   ttl      = 1
