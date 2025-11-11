@@ -1,6 +1,6 @@
 resource "cloudflare_dns_record" "OCI_BOM_ARM_domain_access" {
   comment  = "OCI Mumbai server on ARM"
-  content  = var.oci-bom-arm-ip
+  content  = var.oci-bom-amd-1-ip
   name     = "oci-bom-arm.${var.domain_access}"
   proxied  = false
   ttl      = 1
@@ -43,7 +43,7 @@ resource "cloudflare_dns_record" "OCI_ZRH_AMD_1_domain_access" {
 }
 
 resource "cloudflare_dns_record" "OCI_BOM_ARM_domain_access_traefik" {
-  content  = var.oci-bom-arm-ip
+  content  = var.oci-bom-amd-1-ip
   name     = var.domain_access
   proxied  = false
   ttl      = 1
