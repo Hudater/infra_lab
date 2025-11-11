@@ -1,6 +1,6 @@
 resource "cloudflare_dns_record" "OCI_BOM_ARM_domain_access" {
   comment  = "OCI Mumbai server on ARM"
-  content  = var.oci-bom-amd-1-ip
+  content  = var.oci-bom-arm-ip
   name     = "oci-bom-arm.${var.domain_access}"
   proxied  = false
   ttl      = 1
@@ -42,20 +42,20 @@ resource "cloudflare_dns_record" "OCI_ZRH_AMD_1_domain_access" {
   settings = {}
 }
 
-resource "cloudflare_dns_record" "OCI_BOM_ARM_domain_access_traefik" {
-  content  = var.oci-bom-amd-1-ip
+resource "cloudflare_dns_record" "OCI_ZRH_ARM_domain_access_traefik" {
+  content  = var.oci-zrh-arm-ip
   name     = var.domain_access
-  proxied  = false
+  proxied  = true
   ttl      = 1
   type     = "A"
   zone_id  = var.zone_id_domain_access
   settings = {}
 }
 
-resource "cloudflare_dns_record" "OCI_BOM_ARM_domain_access_wildcard_traefik" {
+resource "cloudflare_dns_record" "OCI_ZRH_ARM_domain_access_wildcard_traefik" {
   content  = var.domain_access
   name     = "*.${var.domain_access}"
-  proxied  = false
+  proxied  = true
   ttl      = 1
   type     = "CNAME"
   zone_id  = var.zone_id_domain_access
