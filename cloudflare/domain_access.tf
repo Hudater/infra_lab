@@ -43,7 +43,7 @@ resource "cloudflare_dns_record" "OCI_ZRH_AMD_1_domain_access" {
 }
 
 resource "cloudflare_dns_record" "OCI_ZRH_ARM_domain_access_traefik" {
-  content  = var.oci-zrh-arm-ip
+  content  = var.oci-bom-amd-1-ip
   name     = var.domain_access
   proxied  = true
   ttl      = 1
