@@ -1,3 +1,14 @@
+resource "cloudflare_dns_record" "hudater_dev" {
+  content  = "hudater.github.io"
+  name     = "hudater.dev"
+  proxied  = true
+  ttl      = 1
+  type     = "CNAME"
+  zone_id  = var.zone_id_hudater_dev
+  settings = {}
+}
+
+
 resource "cloudflare_dns_record" "blog_hudater_dev" {
   content  = "hudater.github.io"
   name     = "blog.hudater.dev"
