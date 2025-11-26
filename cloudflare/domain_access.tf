@@ -61,3 +61,13 @@ resource "cloudflare_dns_record" "OCI_ZRH_ARM_domain_access_wildcard_traefik" {
   zone_id  = var.zone_id_domain_access
   settings = {}
 }
+resource "cloudflare_dns_record" "OCI_BOM_ARM_domain_access_test" {
+  comment  = "OCI Mumbai server on ARM"
+  content  = var.oci-bom-arm-ip
+  name     = "test.${var.domain_access}"
+  proxied  = false
+  ttl      = 1
+  type     = "A"
+  zone_id  = var.zone_id_domain_access
+  settings = {}
+}
