@@ -17,12 +17,6 @@ variable "zone_id_domain_access" {
   sensitive   = true
 }
 
-variable "zone_id_devop_ing" {
-  description = "Zone ID for specific domains on cloudflare"
-  type        = string
-  sensitive   = true
-}
-
 variable "zone_id_haops_dev" {
   description = "Zone ID for specific domains on cloudflare"
   type        = string
