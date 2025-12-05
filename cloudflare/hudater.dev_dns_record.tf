@@ -41,8 +41,8 @@ resource "cloudflare_dns_record" "hudater_dev_gh_pages_4" {
 resource "cloudflare_dns_record" "www_hudater_dev" {
   content  = "hudater.github.io"
   name     = "www.hudater.dev"
-  proxied  = true
-  ttl      = 1
+  proxied  = false
+  ttl      = 3600
   type     = "CNAME"
   zone_id  = var.zone_id_hudater_dev
   settings = {}
@@ -51,8 +51,8 @@ resource "cloudflare_dns_record" "www_hudater_dev" {
 resource "cloudflare_dns_record" "blog_hudater_dev" {
   content  = "hudater.github.io"
   name     = "blog.hudater.dev"
-  proxied  = true
-  ttl      = 1
+  proxied  = false
+  ttl      = 3600
   type     = "CNAME"
   zone_id  = var.zone_id_hudater_dev
   settings = {}
@@ -61,9 +61,8 @@ resource "cloudflare_dns_record" "blog_hudater_dev" {
 resource "cloudflare_dns_record" "docs_hudater_dev" {
   content = "hudater.github.io"
   name    = "docs.hudater.dev"
-  proxied = true
-  tags    = []
-  ttl     = 1
+  proxied = false
+  ttl     = 3600
   type    = "CNAME"
   zone_id = var.zone_id_hudater_dev
   settings = {

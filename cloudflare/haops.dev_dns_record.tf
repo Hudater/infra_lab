@@ -1,9 +1,9 @@
 resource "cloudflare_dns_record" "docs" {
   content = "hudater.github.io"
   name    = "archive-docs.haops.dev"
-  proxied = true
+  proxied = false
   tags    = []
-  ttl     = 1
+  ttl     = 3600
   type    = "CNAME"
   zone_id = var.zone_id_haops_dev
   settings = {
