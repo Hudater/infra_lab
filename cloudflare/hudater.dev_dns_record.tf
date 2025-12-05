@@ -1,9 +1,39 @@
 resource "cloudflare_dns_record" "hudater_dev" {
-  content  = "hudater.github.io"
-  name     = "hudater.dev"
+  content  = "185.199.108.153"
+  name     = hudater.dev
   proxied  = true
   ttl      = 1
-  type     = "CNAME"
+  type     = "A"
+  zone_id  = var.zone_id_hudater_dev
+  settings = {}
+}
+
+resource "cloudflare_dns_record" "hudater_dev" {
+  content  = "185.199.109.153"
+  name     = hudater.dev
+  proxied  = true
+  ttl      = 1
+  type     = "A"
+  zone_id  = var.zone_id_hudater_dev
+  settings = {}
+}
+
+resource "cloudflare_dns_record" "hudater_dev" {
+  content  = "185.199.110.153"
+  name     = hudater.dev
+  proxied  = true
+  ttl      = 1
+  type     = "A"
+  zone_id  = var.zone_id_hudater_dev
+  settings = {}
+}
+
+resource "cloudflare_dns_record" "hudater_dev" {
+  content  = "185.199.111.153"
+  name     = hudater.dev
+  proxied  = true
+  ttl      = 1
+  type     = "A"
   zone_id  = var.zone_id_hudater_dev
   settings = {}
 }
