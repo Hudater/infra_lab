@@ -1,8 +1,8 @@
 resource "cloudflare_dns_record" "hudater_dev_gh_pages_1" {
   content  = "185.199.108.153"
   name     = "hudater.dev"
-  proxied  = true
-  ttl      = 1
+  proxied  = false
+  ttl      = 3600
   type     = "A"
   zone_id  = var.zone_id_hudater_dev
   settings = {}
@@ -11,8 +11,8 @@ resource "cloudflare_dns_record" "hudater_dev_gh_pages_1" {
 resource "cloudflare_dns_record" "hudater_dev_gh_pages_2" {
   content  = "185.199.109.153"
   name     = "hudater.dev"
-  proxied  = true
-  ttl      = 1
+  proxied  = false
+  ttl      = 3600
   type     = "A"
   zone_id  = var.zone_id_hudater_dev
   settings = {}
@@ -21,8 +21,8 @@ resource "cloudflare_dns_record" "hudater_dev_gh_pages_2" {
 resource "cloudflare_dns_record" "hudater_dev_gh_pages_3" {
   content  = "185.199.110.153"
   name     = "hudater.dev"
-  proxied  = true
-  ttl      = 1
+  proxied  = false
+  ttl      = 3600
   type     = "A"
   zone_id  = var.zone_id_hudater_dev
   settings = {}
@@ -31,8 +31,8 @@ resource "cloudflare_dns_record" "hudater_dev_gh_pages_3" {
 resource "cloudflare_dns_record" "hudater_dev_gh_pages_4" {
   content  = "185.199.111.153"
   name     = "hudater.dev"
-  proxied  = true
-  ttl      = 1
+  proxied  = false
+  ttl      = 3600
   type     = "A"
   zone_id  = var.zone_id_hudater_dev
   settings = {}
