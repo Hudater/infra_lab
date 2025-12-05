@@ -3,7 +3,7 @@ resource "cloudflare_dns_record" "docs" {
   name    = "archive-docs.haops.dev"
   proxied = false
   tags    = []
-  ttl     = 3600
+  ttl     = 1
   type    = "CNAME"
   zone_id = var.zone_id_haops_dev
   settings = {
