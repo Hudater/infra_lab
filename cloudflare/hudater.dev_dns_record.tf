@@ -68,15 +68,15 @@ resource "cloudflare_dns_record" "cohort_hudater_dev" {
   settings = {}
 }
 
-resource "cloudflare_dns_record" "test_hudater_dev" {
-  content  = "hudater.github.io"
-  name     = "test.hudater.dev"
-  proxied  = false
-  ttl      = 1
-  type     = "CNAME"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
+# resource "cloudflare_dns_record" "test_hudater_dev" {
+#   content  = "hudater.github.io"
+#   name     = "test.hudater.dev"
+#   proxied  = false
+#   ttl      = 1
+#   type     = "CNAME"
+#   zone_id  = var.zone_id_hudater_dev
+#   settings = {}
+# }
 
 resource "cloudflare_dns_record" "hashnode_hudater_dev" {
   content  = "hashnode.network"
