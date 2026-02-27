@@ -130,10 +130,20 @@ resource "cloudflare_dns_record" "mail_dkim_hudater_dev" {
   settings = {}
 }
 
+resource "cloudflare_dns_record" "mail_mailgun_hudater_dev" {
+  content  = "email.hudater.dev"
+  name     = "mailgun.org"
+  proxied  = false
+  ttl      = 1
+  type     = "CNAME"
+  zone_id  = var.zone_id_hudater_dev
+  settings = {}
+}
+
 resource "cloudflare_dns_record" "mail_route_3_hudater_dev" {
-  content  = "route3.mx.cloudflare.net"
+  content  = "mxa.mailgun.org"
   name     = "hudater.dev"
-  priority = 49
+  priority = 10
   proxied  = false
   ttl      = 1
   type     = "MX"
@@ -142,20 +152,9 @@ resource "cloudflare_dns_record" "mail_route_3_hudater_dev" {
 }
 
 resource "cloudflare_dns_record" "mail_route_2_hudater_dev" {
-  content  = "route2.mx.cloudflare.net"
+  content  = "mxb.mailgun.org"
   name     = "hudater.dev"
-  priority = 99
-  proxied  = false
-  ttl      = 1
-  type     = "MX"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "mail_route_1_hudater_dev" {
-  content  = "route1.mx.cloudflare.net"
-  name     = "hudater.dev"
-  priority = 96
+  priority = 10
   proxied  = false
   ttl      = 1
   type     = "MX"
@@ -164,8 +163,8 @@ resource "cloudflare_dns_record" "mail_route_1_hudater_dev" {
 }
 
 resource "cloudflare_dns_record" "mail_dkim_txt_hudater_dev" {
-  content  = "\"v=DKIM1; h=sha256; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiweykoi+o48IOGuP7GR3X0MOExCUDY/BCRHoWBnh3rChl7WhdyCxW3jgq1daEjPPqoi7sJvdg5hEQVsgVRQP4DcnQDVjGMbASQtrY4WmB1VebF+RPJB2ECPsEDTpeiI5ZyUAwJaVX7r6bznU67g7LvFq35yIo4sdlmtZGV+i0H4cpYH9+3JJ78k\" \"m4KXwaf9xUJCWF6nxeD+qG6Fyruw1Qlbds2r85U9dkNDVAS3gioCvELryh1TxKGiVTkg4wqHTyHfWsp7KD3WQHYJn0RyfJJu6YEmL77zonn7p2SRMvTMP3ZEXibnC9gz3nnhR6wcYL8Q7zXypKTMD58bTixDSJwIDAQAB\""
-  name     = "cf2024-1._domainkey.hudater.dev"
+  content  = "\"k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7CghGTlzDKEC401kWOEB3Oj4tNS6B8nSzVF4pbXZry2PnQLSlQbc2qMQb+kKfNPmS3C5956HY6IquOk52nD6OKlnrGneUY5+U78QxTy4CVTvFKbTmS2iALrB/vfPKYzmGlol/RRczDZa2pMwf4goc19XNUrOCv8+XOvKStxohdQIDAQAB\""
+  name     = "smtp._domainkey.hudater.dev"
   proxied  = false
   ttl      = 1
   type     = "TXT"
@@ -173,19 +172,19 @@ resource "cloudflare_dns_record" "mail_dkim_txt_hudater_dev" {
   settings = {}
 }
 
-resource "cloudflare_dns_record" "mail_dmarc_txt_hudater_dev" {
-  comment  = "DMARC for mail"
-  content  = "\"v=DMARC1;p=quarantine;rua=mailto:harshit@hudater.dev;ruf=mailto:harshit@hudater.dev;\""
-  name     = "_dmarc.hudater.dev"
-  proxied  = false
-  ttl      = 1
-  type     = "TXT"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
+# resource "cloudflare_dns_record" "mail_dmarc_txt_hudater_dev" {
+#   comment  = "DMARC for mail"
+#   content  = "\"v=DMARC1;p=quarantine;rua=mailto:harshit@hudater.dev;ruf=mailto:harshit@hudater.dev;\""
+#   name     = "_dmarc.hudater.dev"
+#   proxied  = false
+#   ttl      = 1
+#   type     = "TXT"
+#   zone_id  = var.zone_id_hudater_dev
+#   settings = {}
+# }
 
 resource "cloudflare_dns_record" "mail_spf_txt_hudater_dev" {
-  content  = "\"v=spf1 include:_spf.mx.cloudflare.net ~all\""
+  content  = "\"v=spf1 include:mailgun.org ~all\""
   name     = "hudater.dev"
   proxied  = false
   ttl      = 1
