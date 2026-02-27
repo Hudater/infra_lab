@@ -131,8 +131,8 @@ resource "cloudflare_dns_record" "mail_dkim_hudater_dev" {
 }
 
 resource "cloudflare_dns_record" "mail_mailgun_hudater_dev" {
-  content  = "email.hudater.dev"
-  name     = "mailgun.org"
+  content  = "mailgun.org"
+  name     = "email.hudater.dev"
   proxied  = false
   ttl      = 1
   type     = "CNAME"
