@@ -172,16 +172,16 @@ resource "cloudflare_dns_record" "mail_dkim_txt_hudater_dev" {
   settings = {}
 }
 
-# resource "cloudflare_dns_record" "mail_dmarc_txt_hudater_dev" {
-#   comment  = "DMARC for mail"
-#   content  = "\"v=DMARC1;p=quarantine;rua=mailto:harshit@hudater.dev;ruf=mailto:harshit@hudater.dev;\""
-#   name     = "_dmarc.hudater.dev"
-#   proxied  = false
-#   ttl      = 1
-#   type     = "TXT"
-#   zone_id  = var.zone_id_hudater_dev
-#   settings = {}
-# }
+resource "cloudflare_dns_record" "mail_dmarc_txt_hudater_dev" {
+  comment  = "DMARC for mail"
+  content  = "\"v=DMARC1; p=none; pct=100; fo=1; ri=3600; rua=mailto:d8e40f9a@dmarc.mailgun.org,mailto:25d0ce1f@inbox.ondmarc.com; ruf=mailto:d8e40f9a@dmarc.mailgun.org,mailto:25d0ce1f@inbox.ondmarc.com;\""
+  name     = "_dmarc.hudater.dev"
+  proxied  = false
+  ttl      = 1
+  type     = "TXT"
+  zone_id  = var.zone_id_hudater_dev
+  settings = {}
+}
 
 resource "cloudflare_dns_record" "mail_spf_txt_hudater_dev" {
   content  = "\"v=spf1 include:mailgun.org ~all\""
