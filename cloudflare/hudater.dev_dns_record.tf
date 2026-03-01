@@ -184,7 +184,7 @@ resource "cloudflare_dns_record" "mail_dmarc_txt_hudater_dev" {
 }
 
 resource "cloudflare_dns_record" "mail_spf_txt_hudater_dev" {
-  content  = "\"v=spf1 include:mailgun.org ~all\""
+  content  = "\"v=spf1 include:_spf.smtp2go.com include:mailgun.org ~all\""
   name     = "hudater.dev"
   proxied  = false
   ttl      = 1
