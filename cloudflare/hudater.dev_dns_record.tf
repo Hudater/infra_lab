@@ -31,11 +31,22 @@ resource "cloudflare_dns_record" "hudater_dev_apex" {
 resource "cloudflare_dns_record" "hudater_dev_subdomains" {
   for_each = toset(local.gh_pages_subdomains)
   name     = "${each.value}.hudater.dev"
-  content  = "hudater.dev"
+  content  = "hudater.github.io"
   type     = "CNAME"
   ttl      = 300
   proxied  = false
   zone_id  = var.zone_id_hudater_dev
+}
+# Public status page
+resource "cloudflare_dns_record" "satus_hudater_dev" {
+  comment  = "Status page for whole infrastructure"
+  content  = var.domain_lab
+  name     = "status.hudater.dev"
+  proxied  = true
+  ttl      = 1
+  type     = "CNAME"
+  zone_id  = var.zone_id_hudater_dev
+  settings = {}
 }
 
 resource "cloudflare_dns_record" "hashnode_hudater_dev" {
