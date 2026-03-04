@@ -1,113 +1,51 @@
-resource "cloudflare_dns_record" "hudater_dev_gh_pages_1" {
-  content  = "185.199.108.153"
+locals {
+  github_pages_ips = [
+    "185.199.108.153",
+    "185.199.109.153",
+    "185.199.110.153",
+    "185.199.111.153"
+  ]
+
+  gh_pages_subdomains = [
+    "blog",
+    "cohort",
+    "docs",
+    "links",
+    "staging",
+    "www"
+  ]
+}
+
+# Apex record for GitHub Pages
+resource "cloudflare_dns_record" "hudater_dev_apex" {
+  for_each = toset(local.github_pages_ips)
   name     = "hudater.dev"
-  proxied  = false
-  ttl      = 1
+  content  = each.value
   type     = "A"
+  ttl      = 300
+  proxied  = false
   zone_id  = var.zone_id_hudater_dev
-  settings = {}
 }
 
-resource "cloudflare_dns_record" "hudater_dev_gh_pages_2" {
-  content  = "185.199.109.153"
-  name     = "hudater.dev"
-  proxied  = false
-  ttl      = 1
-  type     = "A"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "hudater_dev_gh_pages_3" {
-  content  = "185.199.110.153"
-  name     = "hudater.dev"
-  proxied  = false
-  ttl      = 1
-  type     = "A"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "hudater_dev_gh_pages_4" {
-  content  = "185.199.111.153"
-  name     = "hudater.dev"
-  proxied  = false
-  ttl      = 1
-  type     = "A"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "www_hudater_dev" {
-  content  = "hudater.github.io"
-  name     = "www.hudater.dev"
-  proxied  = false
-  ttl      = 1
+# Subdomains for GitHub Pages
+resource "cloudflare_dns_record" "hudater_dev_subdomains" {
+  for_each = toset(local.gh_pages_subdomains)
+  name     = "${each.value}.hudater.dev"
+  content  = "hudater.dev"
   type     = "CNAME"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "staging_hudater_dev" {
-  content  = "hudater.github.io"
-  name     = "staging.hudater.dev"
+  ttl      = 300
   proxied  = false
-  ttl      = 1
-  type     = "CNAME"
   zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "blog_hudater_dev" {
-  content  = "hudater.github.io"
-  name     = "blog.hudater.dev"
-  proxied  = false
-  ttl      = 1
-  type     = "CNAME"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "cohort_hudater_dev" {
-  content  = "hudater.github.io"
-  name     = "cohort.hudater.dev"
-  proxied  = false
-  ttl      = 1
-  type     = "CNAME"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
-
-resource "cloudflare_dns_record" "test_hudater_dev" {
-  content  = "hudater.github.io"
-  name     = "links.hudater.dev"
-  proxied  = false
-  ttl      = 1
-  type     = "CNAME"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
 }
 
 resource "cloudflare_dns_record" "hashnode_hudater_dev" {
   content  = "hashnode.network"
   name     = "hashnode.hudater.dev"
   proxied  = false
-  ttl      = 1
+  ttl      = 300
   type     = "CNAME"
   zone_id  = var.zone_id_hudater_dev
   settings = {}
-}
-
-resource "cloudflare_dns_record" "docs_hudater_dev" {
-  content = "hudater.github.io"
-  name    = "docs.hudater.dev"
-  proxied = false
-  ttl     = 1
-  type    = "CNAME"
-  zone_id = var.zone_id_hudater_dev
-  settings = {
-    flatten_cname = false
-  }
 }
 
 resource "cloudflare_dns_record" "mail_return_hudater_dev" {
