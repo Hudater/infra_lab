@@ -140,4 +140,3 @@ resource "cloudflare_dns_record" "mail_spf_txt_hudater_dev" {
   zone_id  = var.zone_id_hudater_dev
   settings = {}
 }
-
