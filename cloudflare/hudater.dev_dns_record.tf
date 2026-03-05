@@ -40,9 +40,9 @@ resource "cloudflare_dns_record" "hudater_dev_subdomains" {
 # Public status page
 resource "cloudflare_dns_record" "satus_hudater_dev" {
   comment  = "Status page for whole infrastructure"
-  content  = var.domain_lab
+  content  = "${var.domain_lab}"
   name     = "status.hudater.dev"
-  proxied  = true
+  proxied  = false
   ttl      = 1
   type     = "CNAME"
   zone_id  = var.zone_id_hudater_dev
