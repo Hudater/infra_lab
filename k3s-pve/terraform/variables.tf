@@ -35,7 +35,7 @@ variable "template_vmid" {
 variable "storage_pool" {
   description = "Proxmox storage pool for VM disks"
   type        = string
-  default     = "local-lvm"
+  default     = "xpg_nvme"
 }
 
 variable "network_bridge" {
@@ -139,7 +139,13 @@ variable "vm_user" {
   default = "ubuntu"
 }
 
-variable "ssh_public_key" {
-  type      = string
-  sensitive = true
+# variable "ssh_public_key" {
+#   type      = string
+#   sensitive = true
+# }
+
+variable "ssh_public_key_path" {
+  description = "Path to SSH public key file"
+  type        = string
+  default     = "~/.ssh/lan_key.pub"
 }

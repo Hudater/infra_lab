@@ -1,4 +1,11 @@
 ---
+- name: Debug hostname vars
+  ansible.builtin.debug:
+    msg:
+      - "inventory_hostname: {{ inventory_hostname }}"
+      - "ansible_hostname: {{ ansible_hostname }}"
+  become: false
+
 - name: Check if k3s binary exists
   ansible.builtin.stat:
     path: /usr/local/bin/k3s

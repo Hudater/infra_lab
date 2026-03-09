@@ -25,22 +25,26 @@ provider "proxmox" {
 }
 
 # ── Cloud-init snippet (uploaded once, shared by all VMs) ──────────────────
-resource "proxmox_virtual_environment_file" "cloud_init_user_data" {
+resource "proxmox_virtual_environment_file" "cloud_init_server" {
+  for_each     = local.servers
   content_type = "snippets"
   datastore_id = "local"
   node_name    = var.proxmox_node
 
   source_raw {
-    file_name = "k3s-user-data.yaml"
+    file_name = "k3s-${each.key}-user-data.yaml"
     data      = <<-EOF
       #cloud-config
+      hostname: ${each.key}
+      fqdn: ${each.key}.local
+      manage_etc_hosts: true
       users:
         - name: ${var.vm_user}
           groups: sudo
           shell: /bin/bash
           sudo: ALL=(ALL) NOPASSWD:ALL
           ssh_authorized_keys:
-            - ${var.ssh_public_key}
+            - ${file(var.ssh_public_key_path)}
       package_update: true
       packages:
         - qemu-guest-agent
@@ -54,6 +58,38 @@ resource "proxmox_virtual_environment_file" "cloud_init_user_data" {
   }
 }
 
+resource "proxmox_virtual_environment_file" "cloud_init_agent" {
+  for_each     = local.agents
+  content_type = "snippets"
+  datastore_id = "local"
+  node_name    = var.proxmox_node
+
+  source_raw {
+    file_name = "k3s-${each.key}-user-data.yaml"
+    data      = <<-EOF
+      #cloud-config
+      hostname: ${each.key}
+      fqdn: ${each.key}.local
+      manage_etc_hosts: true
+      users:
+        - name: ${var.vm_user}
+          groups: sudo
+          shell: /bin/bash
+          sudo: ALL=(ALL) NOPASSWD:ALL
+          ssh_authorized_keys:
+            - ${file(var.ssh_public_key_path)}
+      package_update: true
+      packages:
+        - qemu-guest-agent
+        - curl
+        - ca-certificates
+        - nfs-common
+        - open-iscsi
+      runcmd:
+        - systemctl enable --now qemu-guest-agent
+    EOF
+  }
+}
 # ── Local maps ─────────────────────────────────────────────────────────────
 locals {
   servers = {
@@ -110,8 +146,8 @@ resource "proxmox_virtual_environment_vm" "k3s_server" {
   }
 
   network_device {
-    bridge = var.network_bridge
-    model  = "virtio"
+    bridge  = var.network_bridge
+    model   = "virtio"
     vlan_id = var.vlan_id
   }
 
@@ -130,7 +166,7 @@ resource "proxmox_virtual_environment_vm" "k3s_server" {
       }
     }
     dns { servers = [var.dns_server] }
-    user_data_file_id = proxmox_virtual_environment_file.cloud_init_user_data.id
+    user_data_file_id = proxmox_virtual_environment_file.cloud_init_server[each.key].id
   }
 
   lifecycle {
@@ -195,7 +231,8 @@ resource "proxmox_virtual_environment_vm" "k3s_agent" {
       }
     }
     dns { servers = [var.dns_server] }
-    user_data_file_id = proxmox_virtual_environment_file.cloud_init_user_data.id
+    # user_data_file_id = proxmox_virtual_environment_file.cloud_init_user_data.id
+    user_data_file_id = proxmox_virtual_environment_file.cloud_init_agent[each.key].id
   }
 
   lifecycle {
