@@ -40,3 +40,10 @@
   until: agent_status.stdout == "Ready"
   changed_when: false
   become: true
+
+- name: Label agent nodes with worker role
+  ansible.builtin.shell: |
+    k3s kubectl label node {{ inventory_hostname }} node-role.kubernetes.io/worker=worker --overwrite
+  delegate_to: "{{ groups['k3s_servers'][0] }}"
+  changed_when: false
+  become: true
