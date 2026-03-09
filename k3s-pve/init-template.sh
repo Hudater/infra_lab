@@ -6,6 +6,6 @@ qm importdisk 9000 jammy-server-cloudimg-amd64.img xpg_nvme
 qm set 9000 --scsihw virtio-scsi-pci --scsi0 xpg_nvme:vm-9000-disk-0
 qm set 9000 --ide2 xpg_nvme:cloudinit
 qm set 9000 --boot c --bootdisk scsi0
-qm set 9000 --serial0 socket --vga serial0
+qm set 9000 --serial0 socket --vga std
 qm set 9000 --agent enabled=1
 qm template 9000
