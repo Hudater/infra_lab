@@ -1,0 +1,25 @@
+---
+# Fetches kubeconfig from the init server to your local machine
+# Tag: kubeconfig
+
+- name: Slurp raw kubeconfig from init server
+  ansible.builtin.slurp:
+    src: "{{ k3s_kubeconfig }}"
+  register: raw_kubeconfig
+  become: true
+
+- name: Write kubeconfig to localhost (with server IP substituted)
+  ansible.builtin.copy:
+    content: >-
+      {{ raw_kubeconfig.content | b64decode | replace('127.0.0.1', k3s_init_host) }}
+    dest: "{{ lookup('env', 'HOME') }}/.kube/k3s-homelab.yaml"
+    mode: "0600"
+  delegate_to: localhost
+  become: false
+
+- name: Print usage hint
+  ansible.builtin.debug:
+    msg:
+      - "Kubeconfig written to ~/.kube/k3s-homelab.yaml"
+      - "Run: export KUBECONFIG=~/.kube/k3s-homelab.yaml"
+      - "Then: kubectl get nodes -o wide"

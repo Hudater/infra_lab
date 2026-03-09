@@ -1,0 +1,25 @@
+---
+# k3s version — always pin for reproducibility
+k3s_version: "v1.29.4+k3s1"
+
+# Shared cluster token — use ansible-vault in production:
+# ansible-vault encrypt_string 'your-random-32-char-string' --name 'k3s_token'
+k3s_token: "CHANGEME_USE_ANSIBLE_VAULT"
+
+# First server in inventory acts as the init node
+k3s_init_host: "{{ hostvars[groups['k3s_servers'][0]].ansible_host }}"
+k3s_api_port: 6443
+
+# Disable traefik + servicelb
+k3s_server_args: >-
+  --disable traefik
+  --disable servicelb
+  --flannel-backend=vxlan
+  --tls-san={{ k3s_init_host }}
+
+k3s_agent_args: ""
+
+k3s_config_dir: /etc/rancher/k3s
+k3s_kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+k3s_disable_swap: true

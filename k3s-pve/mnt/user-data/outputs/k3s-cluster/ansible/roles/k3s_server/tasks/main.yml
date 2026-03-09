@@ -1,0 +1,79 @@
+---
+- name: Check if k3s binary exists
+  ansible.builtin.stat:
+    path: /usr/local/bin/k3s
+  register: k3s_binary
+
+- name: Download k3s install script
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: /tmp/k3s-install.sh
+    mode: "0755"
+  when: not k3s_binary.stat.exists
+
+# ── Init node (k3s_init_node=true in inventory) ───────────────────────────
+- name: Install k3s init server (--cluster-init)
+  ansible.builtin.shell: |
+    INSTALL_K3S_VERSION="{{ k3s_version }}" \
+    K3S_TOKEN="{{ k3s_token }}" \
+    /tmp/k3s-install.sh server \
+      --cluster-init \
+      {{ k3s_server_args }}
+  args:
+    creates: /usr/local/bin/k3s
+  when:
+    - not k3s_binary.stat.exists
+    - k3s_init_node is defined and k3s_init_node | bool
+  become: true
+  notify: Restart k3s
+
+- name: Wait for kubeconfig on init node
+  ansible.builtin.wait_for:
+    path: "{{ k3s_kubeconfig }}"
+    timeout: 120
+  when: k3s_init_node is defined and k3s_init_node | bool
+
+- name: Fetch node-token from init server
+  ansible.builtin.slurp:
+    src: /var/lib/rancher/k3s/server/node-token
+  register: k3s_node_token_raw
+  when: k3s_init_node is defined and k3s_init_node | bool
+  become: true
+
+- name: Set node-token fact (broadcast to all plays)
+  ansible.builtin.set_fact:
+    k3s_node_token: "{{ k3s_node_token_raw.content | b64decode | trim }}"
+  when: k3s_init_node is defined and k3s_init_node | bool
+
+# ── Additional server nodes ───────────────────────────────────────────────
+- name: Install k3s additional servers (join existing cluster)
+  ansible.builtin.shell: |
+    INSTALL_K3S_VERSION="{{ k3s_version }}" \
+    K3S_TOKEN="{{ hostvars[groups['k3s_servers'][0]].k3s_node_token }}" \
+    K3S_URL="https://{{ k3s_init_host }}:{{ k3s_api_port }}" \
+    /tmp/k3s-install.sh server \
+      {{ k3s_server_args }}
+  args:
+    creates: /usr/local/bin/k3s
+  when:
+    - not k3s_binary.stat.exists
+    - k3s_init_node is not defined or not (k3s_init_node | bool)
+  become: true
+  notify: Restart k3s
+
+- name: Enable and start k3s
+  ansible.builtin.systemd:
+    name: k3s
+    enabled: true
+    state: started
+  become: true
+
+- name: Wait for this server node to become Ready
+  ansible.builtin.shell: |
+    k3s kubectl get node {{ inventory_hostname }} --no-headers | awk '{print $2}'
+  register: node_status
+  retries: 20
+  delay: 10
+  until: node_status.stdout == "Ready"
+  changed_when: false
+  become: true
