@@ -1,10 +1,10 @@
 ---
-- name: Debug hostname vars
-  ansible.builtin.debug:
-    msg:
-      - "inventory_hostname: {{ inventory_hostname }}"
-      - "ansible_hostname: {{ ansible_hostname }}"
-  become: false
+# - name: Debug hostname vars
+#   ansible.builtin.debug:
+#     msg:
+#       - "inventory_hostname: {{ inventory_hostname }}"
+#       - "ansible_hostname: {{ ansible_hostname }}"
+#   become: false
 
 - name: Check if k3s binary exists
   ansible.builtin.stat:
@@ -77,7 +77,7 @@
 
 - name: Wait for this server node to become Ready
   ansible.builtin.shell: |
-    k3s kubectl get node {{ ansible_hostname }} --no-headers | awk '{print $2}'
+    k3s kubectl get node {{ inventory_hostname }} --no-headers | awk '{print $2}'
   register: node_status
   retries: 20
   delay: 10
