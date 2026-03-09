@@ -1,0 +1,43 @@
+---
+- name: Check if k3s binary exists
+  ansible.builtin.stat:
+    path: /usr/local/bin/k3s
+  register: k3s_binary
+
+- name: Download k3s install script
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: /tmp/k3s-install.sh
+    mode: "0755"
+  when: not k3s_binary.stat.exists
+
+- name: Install k3s agent (join cluster)
+  ansible.builtin.shell: |
+    INSTALL_K3S_VERSION="{{ k3s_version }}" \
+    K3S_TOKEN="{{ hostvars[groups['k3s_servers'][0]].k3s_node_token }}" \
+    K3S_URL="https://{{ k3s_init_host }}:{{ k3s_api_port }}" \
+    /tmp/k3s-install.sh agent \
+      {{ k3s_agent_args }}
+  args:
+    creates: /usr/local/bin/k3s
+  when: not k3s_binary.stat.exists
+  become: true
+
+- name: Enable and start k3s-agent
+  ansible.builtin.systemd:
+    name: k3s-agent
+    enabled: true
+    state: started
+  become: true
+
+- name: Wait for agent to register as Ready (checked from init server)
+  ansible.builtin.shell: |
+    k3s kubectl get node {{ hostvars[item].ansible_hostname }} --no-headers | awk '{print $2}'
+  delegate_to: "{{ groups['k3s_servers'][0] }}"
+  loop: "{{ ansible_play_hosts }}"
+  register: agent_status
+  retries: 20
+  delay: 10
+  until: agent_status.results | selectattr('stdout', 'equalto', 'Ready') | list | length == ansible_play_hosts | length
+  changed_when: false
+  become: true
