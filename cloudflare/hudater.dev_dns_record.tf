@@ -49,17 +49,18 @@ resource "cloudflare_dns_record" "satus_hudater_dev" {
   settings = {}
 }
 
+# NOTE: handled in resume-pipeline repo now
 # Resume pipeline
-resource "cloudflare_dns_record" "resume_hudater_dev" {
-  comment  = "Resume pipeline page"
-  content  = "workers.dev"
-  name     = "resume.hudater.dev"
-  proxied  = true
-  ttl      = 1
-  type     = "CNAME"
-  zone_id  = var.zone_id_hudater_dev
-  settings = {}
-}
+# resource "cloudflare_dns_record" "resume_hudater_dev" {
+#   comment  = "Resume pipeline page"
+#   content  = "workers.dev"
+#   name     = "resume.hudater.dev"
+#   proxied  = true
+#   ttl      = 1
+#   type     = "CNAME"
+#   zone_id  = var.zone_id_hudater_dev
+#   settings = {}
+# }
 
 resource "cloudflare_dns_record" "hashnode_hudater_dev" {
   content  = "hashnode.network"
