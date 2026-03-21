@@ -12,6 +12,7 @@ locals {
     "docs",
     "links",
     "staging",
+    "talwinder",
     "www"
   ]
 }
