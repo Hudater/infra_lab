@@ -7,11 +7,13 @@ on:
       - "oci/zurich/**"
       - "oci/_modules/**"
       - "oci/root.hcl"
+      - ".github/workflows/oci-zurich.yml"
   pull_request:
     paths:
       - "oci/zurich/**"
       - "oci/_modules/**"
       - "oci/root.hcl"
+      - ".github/workflows/oci-zurich.yml"
 
 permissions:
   contents: write

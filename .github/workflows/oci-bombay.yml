@@ -7,11 +7,13 @@ on:
       - "oci/bombay/**"
       - "oci/_modules/**"
       - "oci/root.hcl"
+      - ".github/workflows/oci-bombay.yml"
   pull_request:
     paths:
       - "oci/bombay/**"
       - "oci/_modules/**"
       - "oci/root.hcl"
+      - ".github/workflows/oci-bombay.yml"
 
 permissions:
   contents: write
