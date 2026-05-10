@@ -80,3 +80,28 @@ variable "ssh_authorized_keys" {
   description = "SSH public key for OCI instances"
   type        = string
 }
+
+# OCI Provider Authentication
+variable "tenancy_ocid" {
+  description = "OCI Tenancy OCID for authentication"
+  type        = string
+  sensitive   = true
+}
+
+variable "user_ocid" {
+  description = "OCI User OCID for authentication"
+  type        = string
+  sensitive   = true
+}
+
+variable "fingerprint" {
+  description = "Fingerprint of the OCI API key"
+  type        = string
+  sensitive   = true
+}
+
+variable "private_key" {
+  description = "Private key content for OCI API authentication"
+  type        = string
+  sensitive   = true
+}

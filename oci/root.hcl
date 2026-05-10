@@ -16,7 +16,11 @@ terraform {
 }
 
 provider "oci" {
-  region = var.oci_region
+  region              = var.oci_region
+  tenancy_ocid        = var.tenancy_ocid
+  user_ocid           = var.user_ocid
+  fingerprint         = var.fingerprint
+  private_key         = var.private_key
 }
 EOF
 }
@@ -24,4 +28,10 @@ EOF
 # Common inputs for all environments
 inputs = {
   ssh_authorized_keys = get_env("OCI_SSH_PUBLIC_KEY", "")
+  
+  # OCI Provider authentication
+  tenancy_ocid = get_env("OCI_CLI_TENANCY", "")
+  user_ocid    = get_env("OCI_CLI_USER", "")
+  fingerprint  = get_env("OCI_CLI_FINGERPRINT", "")
+  private_key  = get_env("OCI_CLI_KEY_CONTENT", "")
 }
