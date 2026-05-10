@@ -1,9 +1,18 @@
-##TEMP
-oci
-oci-tf
+# macOS system files
+.DS_Store
+
+# temp
+local-dns
+oci/CI_SETUP.md
+
+# Environment variable scripts (contain secrets)
+**/env.sh
 
 # Local .terraform directories
 .terraform/
+
+# Terraform lock files (environment-specific)
+.terraform.lock.hcl
 
 # .tfstate files
 *.tfstate
