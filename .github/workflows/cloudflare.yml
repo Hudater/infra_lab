@@ -6,9 +6,11 @@ on:
     branches: ["main"]
     paths:
       - "cloudflare/**"
+      - ".github/workflows/cloudflare.yml"
   pull_request:
     paths:
       - "cloudflare/**"
+      - ".github/workflows/cloudflare.yml"
 
 permissions:
   pull-requests: write
