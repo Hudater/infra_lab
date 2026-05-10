@@ -8,6 +8,7 @@ output "region_info" {
 
 output "amd1_instance" {
   description = "AMD-1 instance details"
+  sensitive   = true
   value = {
     name        = oci_core_instance.amd1_instance.display_name
     private_ip  = oci_core_instance.amd1_instance.private_ip
@@ -21,6 +22,7 @@ output "amd1_instance" {
 
 output "amd2_instance" {
   description = "AMD-2 instance details"
+  sensitive   = true
   value = {
     name        = oci_core_instance.amd2_instance.display_name
     private_ip  = oci_core_instance.amd2_instance.private_ip
@@ -33,6 +35,7 @@ output "amd2_instance" {
 
 output "arm_instance" {
   description = "ARM instance details"
+  sensitive   = true
   value = {
     name        = oci_core_instance.arm_instance.display_name
     private_ip  = oci_core_instance.arm_instance.private_ip
@@ -56,6 +59,7 @@ output "network_info" {
 
 output "connectivity_info" {
   description = "Complete instance connectivity information"
+  sensitive   = true
   value = {
     amd1 = {
       name       = oci_core_instance.amd1_instance.display_name

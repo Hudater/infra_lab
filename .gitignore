@@ -11,6 +11,9 @@ oci/CI_SETUP.md
 # Local .terraform directories
 .terraform/
 
+# Terragrunt cache directories (anywhere in the tree)
+**/.terragrunt-cache/
+
 # Terraform lock files (environment-specific)
 .terraform.lock.hcl
 
