@@ -12,8 +12,6 @@ on:
       - "oci/zurich/**"
       - "oci/_modules/**"
       - "oci/root.hcl"
-  issue_comment:
-    types: [created]
 
 permissions:
   contents: write
@@ -29,7 +27,6 @@ jobs:
   plan:
     name: "Plan - Zurich"
     runs-on: ubuntu-latest
-    if: github.event_name != 'issue_comment'
     defaults:
       run:
         shell: bash
@@ -66,7 +63,7 @@ jobs:
 
       - name: Terragrunt Plan
         id: plan
-        run: terragrunt plan -no-color -out=tfplan
+        run: terragrunt plan -no-color
         continue-on-error: true
         env:
           OCI_CLI_USER: ${{ secrets.OCI_ZURICH_USER }}
@@ -81,12 +78,22 @@ jobs:
           OCI_ZURICH_AMD_IMAGE_OCID: ${{ secrets.OCI_ZURICH_AMD_IMAGE_OCID }}
           OCI_ZURICH_ARM_IMAGE_OCID: ${{ secrets.OCI_ZURICH_ARM_IMAGE_OCID }}
 
-      - name: Upload Plan
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan-zurich
-          path: oci/zurich/tfplan
-          retention-days: 5
+      - name: Terragrunt Apply
+        id: apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terragrunt apply -auto-approve -input=false
+        env:
+          OCI_CLI_USER: ${{ secrets.OCI_ZURICH_USER }}
+          OCI_CLI_FINGERPRINT: ${{ secrets.OCI_ZURICH_FINGERPRINT }}
+          OCI_CLI_TENANCY: ${{ secrets.OCI_ZURICH_TENANCY }}
+          OCI_CLI_REGION: eu-zurich-1
+          OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_ZURICH_KEY_CONTENT }}
+          OCI_SSH_PUBLIC_KEY: ${{ secrets.OCI_SSH_PUBLIC_KEY }}
+          OCI_ALERT_EMAIL: ${{ secrets.OCI_ALERT_EMAIL }}
+          OCI_ZURICH_AD: ${{ secrets.OCI_ZURICH_AD }}
+          OCI_ZURICH_COMPARTMENT_OCID: ${{ secrets.OCI_ZURICH_COMPARTMENT_OCID }}
+          OCI_ZURICH_AMD_IMAGE_OCID: ${{ secrets.OCI_ZURICH_AMD_IMAGE_OCID }}
+          OCI_ZURICH_ARM_IMAGE_OCID: ${{ secrets.OCI_ZURICH_ARM_IMAGE_OCID }}
 
       - name: Comment Plan on PR
         if: github.event_name == 'pull_request'
@@ -108,95 +115,7 @@ jobs:
             
             </details>
             
-            **To apply, comment \`/apply zurich\`**
-            
-            *Actor: @${{ github.actor }}*`;
-            
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            });
-
-  apply:
-    name: "Apply - Zurich"
-    runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'issue_comment' &&
-      github.event.issue.pull_request &&
-      github.event.comment.body == '/apply zurich'
-    steps:
-      - name: Add reaction
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.rest.reactions.createForIssueComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: context.payload.comment.id,
-              content: 'rocket'
-            });
-
-      - name: Get PR branch
-        id: pr
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { data: pr } = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.issue.number
-            });
-            core.setOutput('ref', pr.head.ref);
-
-      - name: Checkout PR branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.pr.outputs.ref }}
-
-      - name: Setup Terragrunt
-        run: |
-          wget https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
-          chmod +x terragrunt_linux_amd64
-          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
-
-      - name: Setup OpenTofu
-        uses: opentofu/setup-opentofu@v1
-
-      - name: Terragrunt Apply
-        id: apply
-        working-directory: oci/zurich
-        run: terragrunt apply -auto-approve
-        env:
-          OCI_CLI_USER: ${{ secrets.OCI_ZURICH_USER }}
-          OCI_CLI_FINGERPRINT: ${{ secrets.OCI_ZURICH_FINGERPRINT }}
-          OCI_CLI_TENANCY: ${{ secrets.OCI_ZURICH_TENANCY }}
-          OCI_CLI_REGION: eu-zurich-1
-          OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_ZURICH_KEY_CONTENT }}
-          OCI_SSH_PUBLIC_KEY: ${{ secrets.OCI_SSH_PUBLIC_KEY }}
-          OCI_ALERT_EMAIL: ${{ secrets.OCI_ALERT_EMAIL }}
-          OCI_ZURICH_AD: ${{ secrets.OCI_ZURICH_AD }}
-          OCI_ZURICH_COMPARTMENT_OCID: ${{ secrets.OCI_ZURICH_COMPARTMENT_OCID }}
-          OCI_ZURICH_AMD_IMAGE_OCID: ${{ secrets.OCI_ZURICH_AMD_IMAGE_OCID }}
-          OCI_ZURICH_ARM_IMAGE_OCID: ${{ secrets.OCI_ZURICH_ARM_IMAGE_OCID }}
-
-      - name: Comment Result
-        if: always()
-        uses: actions/github-script@v7
-        env:
-          OUTCOME: ${{ steps.apply.outcome }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const outcome = process.env.OUTCOME;
-            const emoji = outcome === 'success' ? '✅' : '❌';
-            
-            const output = `## ${emoji} Apply ${outcome} - Zurich
-            
-            *Applied by: @${{ github.actor }}*`;
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
             
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
