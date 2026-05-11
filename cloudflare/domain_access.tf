@@ -61,3 +61,13 @@ resource "cloudflare_dns_record" "OCI_ZRH_ARM_domain_access_wildcard_traefik" {
   zone_id  = var.zone_id_domain_access
   settings = {}
 }
+
+resource "cloudflare_dns_record" "OCI_ZRH_ARM_domain_access_wgeasy" {
+  content  = var.domain_access
+  name     = "wgeasy.${var.domain_access}"
+  proxied  = false
+  ttl      = 1
+  type     = "CNAME"
+  zone_id  = var.zone_id_domain_access
+  settings = {}
+}
